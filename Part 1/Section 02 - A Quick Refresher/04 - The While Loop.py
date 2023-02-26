@@ -54,8 +54,11 @@ while True:
 # 
 # This is a standard pattern and can be useful in a variety of scenarios.
 # 
-# A simple example might be getting repetitive user input until the user performs and action or provides some specific value.
-For example, suppose we want to use the console to let users enter their name. We just want to make sure their name is at least 2 characters long, contains printable characters only, and only contains alphabetic characters:
+# A simple example might be getting repetitive user input until the user 
+# performs and action or provides some specific value.
+#For example, suppose we want to use the console to let users enter their name.
+# We just want to make sure their name is at least 2 characters long, contains
+# printable characters only, and only contains alphabetic characters:
 # We might try it this way:
 
 # In[17]:
@@ -71,7 +74,9 @@ while not(len(name) >= min_length  and name.isprintable() and name.isalpha()):
 print('Hello, {0}'.format(name))
 
 
-# This works just fine, but notice that we had to write the code to elicit user input **twice** in our code. This is not good practice, and we can easily clean this up as follows:
+# This works just fine, but notice that we had to write the code to elicit 
+# user input **twice** in our code. This is not good practice, and we can easily
+# clean this up as follows:
 
 # In[18]:
 
@@ -86,9 +91,11 @@ while True:
 print('Hello, {0}'.format(name))
 
 
-# We saw how the **break** statement exits the **while** loop and execution resumes on the line immediately after the while code block.
+# We saw how the **break** statement exits the **while** loop and execution
+# resumes on the line immediately after the while code block.
 # 
-# Sometimes, we just want to cut the current iteration short, but continue looping, without exiting the loop itself.
+# Sometimes, we just want to cut the current iteration short, but continue
+# looping, without exiting the loop itself.
 # 
 # This is done using the **continue** statement:
 
@@ -162,7 +169,7 @@ while idx < len(l):
     if l[idx] == val:
         break
     idx += 1
-else:
+else: # Only appies when the loop terminates normally.
     l.append(val)
 
 print(l)

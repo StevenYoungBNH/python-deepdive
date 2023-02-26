@@ -31,7 +31,8 @@ finally:
     print('this always executes')
 
 
-# So, what happens when using a ``try`` statement within a ``while`` loop, and a ``continue`` or ``break`` statement is encountered?
+# So, what happens when using a ``try`` statement within a ``while`` loop, and 
+# a ``continue`` or ``break`` statement is encountered?
 
 # In[47]:
 
@@ -39,28 +40,36 @@ finally:
 a = 0
 b = 2
 
-while a < 3:
-    print('-------------')
-    a += 1
-    b -= 1
-    try:
-        res = a / b
-    except ZeroDivisionError:
-        print('{0}, {1} - division by 0'.format(a, b))
-        res = 0
-        continue
-    finally:
-        print('{0}, {1} - always executes'.format(a, b))
-        
-    print('{0}, {1} - main loop'.format(a, b))
-
-
-# As you can see in the above result, the ``finally`` code still executed, even though the current iteration was cut short with the ``continue`` statement. 
-
-# This works the same with a ``break`` statement:
-
-# In[50]:
-
+try:
+    
+    while a < 3:
+        print('-------------')
+        a += 1
+        b -= 1
+        print(a / b)
+        #try:
+            #res = a / b
+        #except ZeroDivisionError:
+            #print('{0}, {1} - division by 0'.format(a, b))
+            #res = 0
+            #continue
+        #finally:
+            #print('{0}, {1} - always executes'.format(a, b))
+            #break
+            
+        #print('{0}, {1} - main loop'.format(a, b))
+    else:
+        print("In the else clause")
+    
+    # As you can see in the above result, the ``finally`` code still executed, even
+    # though the current iteration was cut short with the ``continue`` statement. 
+    
+    # This works the same with a ``break`` statement:
+    
+    # In[50]:
+except ZeroDivisionError:
+    print ("exited by division by 0")
+    
 
 a = 0
 b = 2

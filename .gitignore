@@ -6,6 +6,8 @@
 *.wpr
 *.wpu
 __history/
+# This is for the WingIDE project environment.
+Python 3 - Python Deep Dive/
 
 # Icon must end with two \r
 Icon
