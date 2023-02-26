@@ -3,7 +3,8 @@
 
 # ## Multi-Line Statements and Strings
 
-# Certain physical newlines are ignored in order to form a complete logical line of code.
+# Certain physical newlines are ignored in order to form a complete logical 
+# line of code.
 
 # #### Implicit Examples
 
@@ -40,13 +41,14 @@ a
 
 # Note if you do use comments, you must close off the collection on a new line.
 # 
-# i.e. the following will not work since the closing ] is actually part of the comment:
+# i.e. the following will not work since the closing ] is actually part of the
+# comment:
 
 # In[7]:
 
 
-a = [1, # first element
-    2 #second element]
+#a = [1, # first element
+    #2 #second element]
 
 
 # This works the same way for tuples, sets, and dictionaries.
@@ -145,7 +147,8 @@ if a > 5 \
 
 # #### Multi-Line Strings
 
-# You can create multi-line strings by using triple delimiters (single or double quotes)
+# You can create multi-line strings by using triple delimiters (single or 
+# double quotes)
 
 # In[26]:
 
@@ -208,11 +211,16 @@ that is not indented in the second line'''
 print(my_func())
 
 
-# Note that these multi-line strings are **not** comments - they are real strings and, unlike comments, are part of your compiled code. They are however sometimes used to create comments, such as ``docstrings``, that we will cover later in this course.
+# Note that these multi-line strings are **not** comments - they are real strings
+# and, unlike comments, are part of your compiled code. They are however sometimes
+# used to create comments, such as ``docstrings``, that we will cover later in
+# this course.
 
-# In general, use ``#`` to comment your code, and use multi-line strings only when actually needed (like for docstrings).
+# In general, use ``#`` to comment your code, and use multi-line strings only when
+# actually needed (like for docstrings).
 
-# Also, there are no multi-line comments in Python. You simply have to use a ``#`` on every line.
+# Also, there are no multi-line comments in Python. You simply have to use a ``#``
+# on every line.
 
 # In[47]:
 
@@ -231,3 +239,19 @@ print(my_func())
     # a multi-line
     # comment
 
+# Doc strings for functions, classes modules etc.
+# Always use """ string regardless of the number of lines.
+# Summary line, followed by a blank line and a more elaborate description.
+
+def my_test_function_1(a, b):
+    """This is a multiline docstring summary line
+    
+Followed by a more elaborate description after a single blank line.
+Refer to PEPs 256 & 258
+for a multi-line docstring put the closing triple quotes on their own line. 
+"""
+    print(f"This is the doc string:\n\n{my_test_function_1.__doc__}")
+
+
+
+my_test_function_1(a, b)    

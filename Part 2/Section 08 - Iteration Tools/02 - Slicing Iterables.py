@@ -4,6 +4,7 @@
 # ### Slicing Iterables
 
 # We know that sequence types can be sliced:
+# sy 5/31/2022
 
 # In[1]:
 
@@ -108,15 +109,15 @@ list(islice(factorials(10), 0, 3))
 
 # We can even use a step value:
 
-# In[14]:
+# In[16]:
 
 
-list(islice(factorials(10), 0, 10, 2))
+list(islice(factorials(10), 1, 11, 2))
 
 
 # It does not support negative indices, or step values, but it does support None for all the arguments. The default, as expected would then be the first element, the last element, and a step of 1:
 
-# In[15]:
+# In[19]:
 
 
 list(islice(factorials(10), None, None, 2))
@@ -124,7 +125,7 @@ list(islice(factorials(10), None, None, 2))
 
 # This function can be very useful when dealing with infinite iterators for example.
 
-# In[16]:
+# In[20]:
 
 
 def factorials():
@@ -136,17 +137,17 @@ def factorials():
 
 # Let's say we want to see the first 5 elements. We could do it the way we have up to now:
 
-# In[17]:
+# In[22]:
 
 
 facts = factorials()
-for _ in range(5):
+for _ in range(50):
     print(next(facts))
 
 
 # Or we could use `islice` as follows:
 
-# In[18]:
+# In[23]:
 
 
 list(islice(factorials(), 5))
@@ -156,7 +157,7 @@ list(islice(factorials(), 5))
 # 
 # To see this, we'll add a print statement to our generator function:
 
-# In[19]:
+# In[24]:
 
 
 def factorials():
@@ -167,13 +168,13 @@ def factorials():
         index += 1
 
 
-# In[20]:
+# In[25]:
 
 
 list(islice(factorials(), 9))
 
 
-# In[21]:
+# In[26]:
 
 
 list(islice(factorials(), None, 10, 2))
@@ -183,7 +184,7 @@ list(islice(factorials(), None, 10, 2))
 
 # The same thing happens if we skip elements in the slice, it still has to call next for the skipped elements:
 
-# In[22]:
+# In[27]:
 
 
 list(islice(factorials(), 5, 10))
@@ -191,25 +192,31 @@ list(islice(factorials(), 5, 10))
 
 # The other thing to watch out for is that islice is an **iterator** - which means it becomes exhausted, **even if you pass an iterable such as a list to it**!
 
-# In[23]:
+# In[35]:
 
 
-l = [1, 2, 3, 4, 5]
+l = [1, 2, 3, 4, 5,6,7,8,9]
 
 
-# In[24]:
+# In[36]:
 
 
 s = islice(l, 0, 3)
 
 
-# In[25]:
+# In[37]:
 
 
 list(s)
 
 
-# In[26]:
+# In[38]:
+
+
+next(s)
+
+
+# In[39]:
 
 
 list(s)
@@ -219,13 +226,13 @@ list(s)
 
 # Furthermore, keep in mind that `islice` iterates over our iterable in order to yield the appropriate values. This means that if we use an iterator, that iterator will get consumed, and possibly exhausted:
 
-# In[30]:
+# In[40]:
 
 
 facts = factorials()
 
 
-# In[31]:
+# In[41]:
 
 
 next(facts), next(facts), next(facts), next(facts)
@@ -233,7 +240,7 @@ next(facts), next(facts), next(facts), next(facts)
 
 # If we now start slicing `facts` with `islice`, remember that the first four values of `facts` have already been consumed!
 
-# In[32]:
+# In[42]:
 
 
 list(islice(facts, 0, 3))
@@ -241,10 +248,16 @@ list(islice(facts, 0, 3))
 
 # And of course, `islice` further consumed our iterator:
 
-# In[33]:
+# In[43]:
 
 
 next(facts)
 
 
 # So, just something to keep in mind when we pass iterators to `islice`, and more generally to any of the functions in `itertools`.
+
+# In[ ]:
+
+
+
+

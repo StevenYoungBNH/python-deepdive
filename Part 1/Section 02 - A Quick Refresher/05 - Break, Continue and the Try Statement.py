@@ -36,7 +36,34 @@ finally:
 
 # In[47]:
 
+# Added additional code, try except commenting in and out to answer a question
+# where the else runs after exiting the loop 'Normally' not with a 'break' or 
+# 'exceptioh. In conclusion if the loop is setup as "while True:" there will 
+# never be a case where the else: will ever be executed. 
 
+a = 0
+b = 2
+
+print("---------- The divide by 0 is handled outside the while loop. ----------")
+
+try:
+    
+    while a < 3:
+        print('-------------')
+        a += 1
+        b -= 1
+        print(a / b)
+    else:
+        # This else clause will never execute due to the abnormal termination by 
+        # exception. 
+        
+        print("In the else clause")
+    # In[50]:
+except ZeroDivisionError:
+    print ("exited by division by 0")
+    
+    
+print("---------- Handling the exception within the while loop. -----------")
 a = 0
 b = 2
 
@@ -46,30 +73,41 @@ try:
         print('-------------')
         a += 1
         b -= 1
-        print(a / b)
-        #try:
-            #res = a / b
-        #except ZeroDivisionError:
-            #print('{0}, {1} - division by 0'.format(a, b))
-            #res = 0
-            #continue
+        
+        # Here the exception is going to be handled ingernally.
+        # If all goes as planned the else clause should execute. 
+        try:
+            print(a / b)
+            res = a / b
+        except ZeroDivisionError:
+            print(f'{a}, {b} - division by 0')
+            res = 0
+            continue # with the finally clause enabled, the continue will not loop
+                     # to the top of the while. This results in the print of 
+                     # the main loop executing. 
+                     
         #finally:
-            #print('{0}, {1} - always executes'.format(a, b))
-            #break
+            #print(f'{a}, {b} - always executes')
+            # break
             
-        #print('{0}, {1} - main loop'.format(a, b))
+        print(f'{a}, {b} - main loop'.format(a, b))
     else:
         print("In the else clause")
     
-    # As you can see in the above result, the ``finally`` code still executed, even
-    # though the current iteration was cut short with the ``continue`` statement. 
+    # As you can see in the above result, the ``finally`` code still 
+    # executed, even
+    # though the current iteration was cut short with the ``continue``
+    # statement. 
     
     # This works the same with a ``break`` statement:
     
     # In[50]:
 except ZeroDivisionError:
     print ("exited by division by 0")
-    
+finally:
+    print("and here we are at the finally which will always occur")
+
+
 
 a = 0
 b = 2
@@ -81,13 +119,13 @@ while a < 3:
     try:
         res = a / b
     except ZeroDivisionError:
-        print('{0}, {1} - division by 0'.format(a, b))
+        print(f'Line 122 {a}, {b} - division by 0')
         res = 0
         break
     finally:
-        print('{0}, {1} - always executes'.format(a, b))
+        print(f'Line 126 {a}, {b} - always executes')
         
-    print('{0}, {1} - main loop'.format(a, b))
+    print(f'Line 128 {a}, {b} - main loop')
 
 
 # We can even combine all this with the ``else`` clause:
@@ -105,15 +143,16 @@ while a < 3:
     try:
         res = a / b
     except ZeroDivisionError:
-        print('{0}, {1} - division by 0'.format(a, b))
+        print(f'Line 146 {a}, {b} - division by 0')
         res = 0
-        break
+        break # try commenting out the break, line 152 will be printed then. 
     finally:
-        print('{0}, {1} - always executes'.format(a, b))
+        print(f'Line 150 {a}, {b} - finally always executes')
         
-    print('{0}, {1} - main loop'.format(a, b))
+    print(f'Line 152 {a}, {b} - main loop')
 else:
-    print('\n\nno errors were encountered!')
+    print('\n\nno errors were encountered!') # Works because the errors were 
+                                             # handled by exception. 
 
 
 # In[55]:
@@ -129,13 +168,13 @@ while a < 3:
     try:
         res = a / b
     except ZeroDivisionError:
-        print('{0}, {1} - division by 0'.format(a, b))
+        print(f'Line 171 {a}, {b} - division by 0')
         res = 0
         break
     finally:
-        print('{0}, {1} - always executes'.format(a, b))
+        print(f'Line 175 {a}, {b} - always executes')
         
-    print('{0}, {1} - main loop'.format(a, b))
+    print(f'Line 177 {a}, {b} - main loop')
 else:
     print('\n\nno errors were encountered!')
 

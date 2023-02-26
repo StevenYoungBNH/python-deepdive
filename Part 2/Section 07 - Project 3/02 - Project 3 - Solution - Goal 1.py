@@ -8,6 +8,9 @@
 # In[1]:
 
 
+from functools import partial
+from datetime import datetime
+from collections import namedtuple
 file_name = 'nyc_parking_tickets_extract.csv'
 
 
@@ -15,16 +18,21 @@ file_name = 'nyc_parking_tickets_extract.csv'
 
 
 with open(file_name) as f:
+    """
+    Read in the first 10 lines, the first being the header, the remainder is the data.
+    This is to see how the data is presented: comma separated, with 2 line feed characters
+    at the end. 
+    """
     for _ in range(10):
         print(next(f))
 
 
-# So we should notice that we have these `\n` line terminators in the file - we'll need to strip those out.
-# 
+# So we should notice that we have these ***`\n`*** line terminators in the file - we'll need to strip those out.
+#
 # Secondly we see that the first row of the file are the column headers - we'll need to skip that line when we want to look at just the data.
-# 
+#
 # We should also not make the assumption that the data is entirely clean - we probably have missing values and will need to deal with that accordingly.
-# 
+#
 # We also will need to determine an appropriatre data type for every column in the data set.
 
 # #### Column Definitions and Named Tuple
@@ -35,6 +43,7 @@ with open(file_name) as f:
 
 
 with open(file_name) as f:
+    # The strip must occur 1st, because the split returns a list which strip does not work on.
     column_headers = next(f).strip('\n').split(',')
     sample_data = next(f).strip('\n').split(',')
 
@@ -42,19 +51,19 @@ with open(file_name) as f:
 # In[4]:
 
 
-column_headers
+print(column_headers)
 
 
 # In[5]:
 
 
-sample_data
+print(sample_data)
 
 
 # In[6]:
 
 
-list(zip(column_headers, sample_data))
+print(list(zip(column_headers, sample_data)))
 
 
 # Let's start by creating a tuple that contains the names of the columns:
@@ -62,18 +71,18 @@ list(zip(column_headers, sample_data))
 # In[7]:
 
 
-column_names = [header.replace(' ', '_').lower() 
+column_names = [header.replace(' ', '_').lower()
                 for header in column_headers]
 
 
 # In[8]:
 
 
-column_names
+print(column_names)
 
 
 # Next we need to determine the data types for each of these fields:
-# 
+#
 #     0. summons_number: looks like integers
 #     1. plate_id: string
 #     2: registration_state: string
@@ -83,20 +92,18 @@ column_names
 #     6: vehicle_body_type: string
 #     7: vehicle_make: string
 #     8: violation_description: string
-# 
+#
 
 # We'll create utility functions to cast the data (which will always be strings) into the appropriate data type for each field.
-# 
+#
 # We have to be careful though, we may have issues with data integrity and our assumptions about the data type.
-# 
+#
 # What we'll do as a first pass is to keep track of the rows where the data was not an integer or date when we expected it (or missing).
 
 # Let's create our named tuple data structure:
 
 # In[9]:
 
-
-from collections import namedtuple
 
 Ticket = namedtuple('Ticket', column_names)
 
@@ -114,7 +121,7 @@ with open(file_name) as f:
 # In[11]:
 
 
-raw_data_row
+print(raw_data_row)
 
 
 # You'll notice that to read the data in the file, we have to skip the first row in the file. Also, I have to use a `with` statement and the file name every time. To make life easier, I'm going to write a small utility function that will yield just the data rows from the file:
@@ -124,7 +131,7 @@ raw_data_row
 
 def read_data():
     with open(file_name) as f:
-        next(f)
+        next(f) #skip the header row.
         yield from f
 
 
@@ -144,6 +151,9 @@ for _ in range(5):
 
 
 def parse_int(value, *, default=None):
+    """
+    The '*' means there are no more positional arguments allowed. 
+    """
     try:
         return int(value)
     except ValueError:
@@ -151,16 +161,15 @@ def parse_int(value, *, default=None):
 
 
 # We need to do the same thing with dates.
-# It looks like the dates are provided in M/D/YYYY format, so we'll use that to parse the date. 
-# 
+# It looks like the dates are provided in M/D/YYYY format, so we'll use that to parse the date.
+#
 # We'll use the `strptime` function available in the `datetime` package.
 
 # In[15]:
 
 
-from datetime import datetime
 def parse_date(value, *, default=None):
-    date_format='%m/%d/%Y'
+    date_format = '%m/%d/%Y'
     try:
         return datetime.strptime(value, date_format).date()
     except ValueError:
@@ -172,29 +181,30 @@ def parse_date(value, *, default=None):
 # In[16]:
 
 
-parse_int('123')
-
+print(parse_int('123'))
+# Although only 1 positional argument is alloweed, it can be named.
+print(parse_int(value = '456'))
 
 # In[17]:
 
 
-parse_int('hello', default='N/A')
+print(parse_int('hello', default='N/A'))
 
 
 # In[18]:
 
 
-parse_date('3/28/2018')
+print(parse_date('3/28/2018'))
 
 
 # In[19]:
 
 
-parse_date('31/31/2000', default='N/A')
+print(parse_date('31/31/2000', default='N/A'))
 
 
 # OK, so these seem to work as expected.
-# 
+#
 # We also need to write a string parser - we want to remove any potential leading and trailing spaces.
 
 # In[20]:
@@ -217,31 +227,28 @@ def parse_string(value, *, default=None):
 # In[21]:
 
 
-parse_string('   hello   ')
+print(parse_string('   hello world   '))
 
 
 # In[22]:
 
 
-parse_string('  ', default='N/A')
+print(parse_string('  ', default='N/A'))
 
 
 # Now that we have our utility functions, we can write our row parser.
-# 
+#
 # To make life easier, I'm going to create a tuple that contains the functions that should be called to clean up each field. The tuple positions will correspond to the fields in the data row.
-# 
+#
 # I'm also going to specify what the default value should be when there is a problem parsing the fields. To do this, I will use `partials`, because I still need a callable for each element of the column parser tuple. (Note that I could just as easily use a lambda as well instead of partials).
 
 # In[23]:
 
 
-from functools import partial
-
-
 # In[24]:
 
 
-column_names
+print(column_names)
 
 
 # In[25]:
@@ -256,26 +263,34 @@ column_parsers = (parse_int,  # summons_number, default is None
                   partial(parse_string, default=''),  # body type
                   parse_string,  # make, default is None
                   lambda x: parse_string(x, default='')  # description
-                 )
+                  )
 
 
-# To parse each field in a row, I'll first separate the data fields into a list of values, then I'll apply the functions in `column_parsers` to the data in that list. 
-# 
+# In[28]:
+
+
+part_string_test = partial(parse_string, default='TBD')
+print(part_string_test(''))
+print(part_string_test('', default ='somethingelse'))
+
+
+# To parse each field in a row, I'll first separate the data fields into a list of values, then I'll apply the functions in `column_parsers` to the data in that list.
+#
 # To do that, I'm going to zip up the parser functions and the data, and use a comprehension to apply each function to its corresponding data field:
 
-# In[26]:
+# In[29]:
 
 
 def parse_row(row):
     fields = row.strip('\n').split(',')
-    parsed_data = (func(field) 
+    parsed_data = (func(field)
                    for func, field in zip(column_parsers, fields))
     return parsed_data
 
 
 # This is not quite what we want yet, but let's test it out and make sure it does what we expect:
 
-# In[27]:
+# In[30]:
 
 
 rows = read_data()
@@ -286,65 +301,65 @@ for _ in range(5):
 
 
 # Let's finish up the row parser.
-# 
+#
 # First I want it to return a named tuple instead of a plain iterator.
-# 
+#
 # Also, the way I have set up the parsers, I only want to look at data where none of the fields are `None` - that's why I had some fields default to an empty string instead of `None` - those are the ones I still want to retain, even if they are empty.
-# 
+#
 # To do this efficiently, I'm going to use `all`
 
 # Let's just quickly recall how `all` works:
 
-# In[28]:
-
-
-all([10, 'hello'])
-
-
-# In[29]:
-
-
-all([None, 'hello'])
-
-
-# But we have to watch out, since we are allowing empty strings in our valid data, we cannot simply use `all`:
-
-# In[30]:
-
-
-all([10, ''])
-
-
-# That's because empty strings are falsy. So, we need to tweak this slightly.
-# 
-# I'll use a generator expression for this:
-
 # In[31]:
 
 
-l = [10, '', 0]
-all(item is not None for item in l)
+print(all([10, 'hello']))
 
 
 # In[32]:
 
 
-l = [10, '', 0, None]
-all(item is not None for item in l)
+print(all([None, 'hello']))
 
 
-# So, now let's finish up our row parser. We'll return a Ticket named tuple if none of the parsed fields are `None`, and we'll allow the user to specify a default otherwise.
+# But we have to watch out, since we are allowing empty strings in our valid data, we cannot simply use `all`:
 
 # In[33]:
 
 
+print(all([10, '']))
+
+
+# That's because empty strings are falsy. So, we need to tweak this slightly.
+#
+# I'll use a generator expression for this:
+
+# In[35]:
+
+
+l = [10, '', 0]
+print(all(item is not None for item in l))
+
+
+# In[36]:
+
+
+l = [10, '', 0, None]
+print(all(item is not None for item in l))
+
+
+# So, now let's finish up our row parser. We'll return a Ticket named tuple if none of the parsed fields are `None`, and we'll allow the user to specify a default otherwise.
+
+# In[37]:
+
+
 def parse_row(row, *, default=None):
     fields = row.strip('\n').split(',')
-    # note that I'm using a list comprehension here, 
+    # note that I'm using a list comprehension here,
     # since we'll need to iterate through the entire parsed fields
     # twice - one time to check if nothing is None
     # and another time to create the named tuple
-    parsed_data = [func(field) 
+    parsed_data = [func(field)
                    for func, field in zip(column_parsers, fields)]
     if all(item is not None for item in parsed_data):
         print(*parsed_data)
@@ -353,9 +368,15 @@ def parse_row(row, *, default=None):
         return default
 
 
+# In[39]:
+
+
+# print(parse_row('a,b,c,d', 1, 2, default="TBD"))
+
+
 # Now let's test it out again:
 
-# In[34]:
+# In[41]:
 
 
 rows = read_data()
@@ -369,7 +390,7 @@ for _ in range(5):
 
 # Let's quickly run through the file and see what data issues we might have - maybe our assumptions were incorrect about the various data types.
 
-# In[35]:
+# In[43]:
 
 
 for row in read_data():
@@ -378,14 +399,14 @@ for row in read_data():
         print(list(zip(column_names, row.strip('\n').split(','))), end='\n\n')
 
 
-# OK, so mostly the data is clean. Looks like we have a few rows without descriptions. 
+# OK, so mostly the data is clean. Looks like we have a few rows without descriptions.
 # Technically there's a whole lot more validation and cleaning we should do. For example, it looks like the states are not always proper state abbreviations (like 99 in some records, etc). But this is good enough for now.
 
 # #### Creating an Iterator for the data
 
 # Finally, let's create an iterator to easily iterate over the cleaned up and structured data in the file, skipping `None` rows:
 
-# In[36]:
+# In[44]:
 
 
 def parsed_data():
@@ -397,10 +418,9 @@ def parsed_data():
 
 # Let's test it out by iterating a few times:
 
-# In[37]:
+# In[45]:
 
 
 parsed_rows = parsed_data()
 for _ in range(5):
     print(next(parsed_rows))
-
