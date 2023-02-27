@@ -97,6 +97,12 @@ class Person:
 # In[11]:
 
 
+f'{hex(id(Person))}'
+
+
+# In[12]:
+
+
 Person.say_hello()
 
 

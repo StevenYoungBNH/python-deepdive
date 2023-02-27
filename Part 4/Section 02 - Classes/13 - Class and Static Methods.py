@@ -192,7 +192,7 @@ class MyClass:
         
     @staticmethod
     def static_hello():
-        print('Static method not bound to anything')
+        print('Static method is not bound to anything')
 
 
 # In[21]:

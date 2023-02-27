@@ -41,12 +41,30 @@ p = Person('Guido')
 # In[3]:
 
 
+p._name   # don't do this!
+
+
+# In[5]:
+
+
 p.name
+
+
+# In[7]:
+
+
+p.get_name()
 
 
 # And the underlying `_name` property is in our instance dictionary:
 
 # In[4]:
+
+
+Person.__dict__  # The class __dict__ - more correctly mappingproxy
+
+
+# In[11]:
 
 
 p.__dict__

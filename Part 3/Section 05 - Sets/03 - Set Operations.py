@@ -22,7 +22,7 @@ s2 = {2, 3, 4}
 s1.intersection(s2)
 
 
-# In[3]:
+# In[4]:
 
 
 s1 & s2
@@ -30,7 +30,7 @@ s1 & s2
 
 # We can computer the intersection of more than just two sets at a time:
 
-# In[4]:
+# In[6]:
 
 
 s1 = {1, 2, 3}
@@ -38,13 +38,13 @@ s2 = {2, 3, 4}
 s3 = {3, 4, 5}
 
 
-# In[5]:
+# In[7]:
 
 
 s1.intersection(s2, s3)
 
 
-# In[6]:
+# In[8]:
 
 
 s1 & s2 & s3
@@ -54,20 +54,20 @@ s1 & s2 & s3
 
 # There's also two ways to calculate the union of two sets:
 
-# In[7]:
+# In[9]:
 
 
 s1 = {1, 2, 3}
 s2 = {3, 4, 5}
 
 
-# In[8]:
+# In[10]:
 
 
 s1.union(s2)
 
 
-# In[9]:
+# In[11]:
 
 
 s1 | s2
@@ -75,19 +75,19 @@ s1 | s2
 
 # We can compute the union of more than two sets:
 
-# In[10]:
+# In[12]:
 
 
 s3 = {5, 6, 7}
 
 
-# In[11]:
+# In[13]:
 
 
 s1.union(s2, s3)
 
 
-# In[12]:
+# In[14]:
 
 
 s1 | s2 | s3
@@ -97,7 +97,7 @@ s1 | s2 | s3
 
 # Two sets are disjoint if their intersection is empty:
 
-# In[13]:
+# In[15]:
 
 
 s1 = {1, 2, 3}
@@ -105,7 +105,7 @@ s2 = {2, 3, 4}
 s3 = {30, 40, 50}
 
 
-# In[14]:
+# In[16]:
 
 
 print(s1.isdisjoint(s2))
@@ -114,13 +114,13 @@ print(s2.isdisjoint(s3))
 
 # Of course we could use the cardinality of the intersection instead:
 
-# In[15]:
+# In[17]:
 
 
 len(s1 & s2)
 
 
-# In[16]:
+# In[18]:
 
 
 len(s2 & s3)
@@ -128,13 +128,13 @@ len(s2 & s3)
 
 # Or, since empty sets are falsy:
 
-# In[17]:
+# In[19]:
 
 
 bool(set())
 
 
-# In[18]:
+# In[20]:
 
 
 bool({0})
@@ -142,14 +142,14 @@ bool({0})
 
 # we can also use the associated truth value:
 
-# In[19]:
+# In[21]:
 
 
 if {1, 2} & {2, 3}:
     print('sets are not disjoint')
 
 
-# In[20]:
+# In[22]:
 
 
 if not {1, 2} & {3, 4}:
@@ -160,20 +160,20 @@ if not {1, 2} & {3, 4}:
 
 # The difference of two sets can also be computed in two different ways:
 
-# In[21]:
+# In[23]:
 
 
 s1 = {1, 2, 3, 4, 5}
 s2 = {4, 5}
 
 
-# In[22]:
+# In[24]:
 
 
 s1 - s2
 
 
-# In[23]:
+# In[25]:
 
 
 s1.difference(s2)
@@ -181,7 +181,7 @@ s1.difference(s2)
 
 # Of course, with the method we can use iterables as well:
 
-# In[24]:
+# In[26]:
 
 
 s1.difference([4, 5])
@@ -192,7 +192,7 @@ s1.difference([4, 5])
 # s1 - s2 = s2 - s1
 # ```
 
-# In[25]:
+# In[27]:
 
 
 s2 - s1
@@ -202,28 +202,34 @@ s2 - s1
 
 # We can calculate the symmetirc difference of two sets also in two ways:
 
-# In[26]:
+# In[28]:
 
 
 s1 = {1, 2, 3, 4, 5}
 s2 = {4, 5, 6, 7, 8}
 
 
-# In[27]:
+# In[29]:
 
 
 s1.symmetric_difference(s2)
 
 
-# In[28]:
+# In[ ]:
 
 
 s1 ^ s2
 
 
+# In[31]:
+
+
+s2^s1  #symmetric difference is communtative s young 10/17/2022
+
+
 # Remember that the symmetric difference of two sets results in the difference of the union and the intersection of the two sets:
 
-# In[29]:
+# In[32]:
 
 
 (s1 | s2) - (s1 & s2)
@@ -234,7 +240,7 @@ s1 ^ s2
 # With containmnent we have the notion of proper containment (i.e strictly contained, not equal) and just containment (contained, possibly equal).
 # This is analogous to the concept of (`i < j` and `i <= j`)
 
-# In[30]:
+# In[40]:
 
 
 s1 = {1, 2, 3}
@@ -243,97 +249,19 @@ s3 = {1, 2, 3, 4}
 s4 = {10, 20, 30}
 
 
-# In[31]:
+# In[41]:
 
 
 s1.issubset(s2)
 
 
-# In[32]:
+# In[42]:
 
 
 s1 <= s2
 
 
 # For strict containment there is no set method - we have to use the operator, or a combination of methods/operators:
-
-# In[33]:
-
-
-s1 < s2
-
-
-# In[34]:
-
-
-s1.issubset(s2) and s1 != s2
-
-
-# In[35]:
-
-
-s1 < s3
-
-
-# In[36]:
-
-
-s1 <= s4
-
-
-# An analogous situation with supersets:
-
-# In[37]:
-
-
-s2.issuperset(s1)
-
-
-# In[38]:
-
-
-s2 >= s1
-
-
-# In[39]:
-
-
-s2 > s1
-
-
-# Be careful with these set containment operators, they do not work quite the same way as with numbers for example:
-
-# With numbers, if
-# ```
-# a <= b --> False
-# ```
-# then it follows that
-# ```
-# a < b --> True
-# ```
-# 
-# This is not the case with set containment:
-
-# In[40]:
-
-
-s1 = {1, 2, 3}
-s2 = {10, 20, 30}
-
-
-# As you can see these two sets are non-empty and disjoint, and containment works as follows:
-
-# In[41]:
-
-
-s1 <= s2
-
-
-# In[42]:
-
-
-s1 > s2
-
 
 # In[43]:
 
@@ -344,10 +272,88 @@ s1 < s2
 # In[44]:
 
 
-s1 >= s2
+s1.issubset(s2) and s1 != s2
 
 
 # In[45]:
+
+
+s1 < s3
+
+
+# In[46]:
+
+
+s1 <= s4
+
+
+# An analogous situation with supersets:
+
+# In[47]:
+
+
+s2.issuperset(s1)
+
+
+# In[48]:
+
+
+s2 >= s1
+
+
+# In[49]:
+
+
+s2 > s1
+
+
+# Be careful with these set containment operators, they do not work quite the same way as with numbers for example:
+
+# With numbers, if
+# ```
+# a >= b --> False - This had been a<=b  a =10, b=10 a<=b -> True but would be False for a<b
+# ```
+# then it follows that
+# ```
+# a < b --> True
+# ```
+# 
+# This is not the case with set containment:
+
+# In[50]:
+
+
+s1 = {1, 2, 3}
+s2 = {10, 20, 30}
+
+
+# As you can see these two sets are non-empty and disjoint, and containment works as follows:
+
+# In[51]:
+
+
+s1 <= s2
+
+
+# In[52]:
+
+
+s1 > s2
+
+
+# In[53]:
+
+
+s1 < s2
+
+
+# In[54]:
+
+
+s1 >= s2
+
+
+# In[55]:
 
 
 s1 == s2
@@ -362,7 +368,7 @@ s1 == s2
 # 
 # When we use the operators (`&`, `|`, `-`) we have to deal with sets on both sides of the operator:
 
-# In[46]:
+# In[56]:
 
 
 {1, 2} & [2, 3]
@@ -370,7 +376,7 @@ s1 == s2
 
 # But when we work with the method equivalent, we do not have that restriction - in fact the argument to these methods can be an iterable in general, not just a set:
 
-# In[47]:
+# In[57]:
 
 
 {1, 2}.intersection([2, 3])
@@ -380,7 +386,7 @@ s1 == s2
 
 # However, these iterables must contain hashable elements - they need not be unique (they will eventually be made to consist of unique elements):
 
-# In[48]:
+# In[58]:
 
 
 {1, 2}.intersection([[1,2]])
@@ -388,14 +394,14 @@ s1 == s2
 
 # This means that when we want to find the intersection of two `lists` for example, we could proceed this way:
 
-# In[49]:
+# In[59]:
 
 
 l1 = [1, 2, 3]
 l2 = [2, 3, 4]
 
 
-# In[50]:
+# In[60]:
 
 
 set(l1).intersection(l2)
@@ -423,14 +429,14 @@ set(l1).intersection(l2)
 
 # Let's look at these two integers:
 
-# In[51]:
+# In[61]:
 
 
 a = 0b101010
 b = 0b110100
 
 
-# In[52]:
+# In[62]:
 
 
 a, b
@@ -438,7 +444,7 @@ a, b
 
 # And these are just two integers, we just chose to create them using a binary literal:
 
-# In[53]:
+# In[63]:
 
 
 type(a), type(b)
@@ -451,7 +457,7 @@ type(a), type(b)
 
 # Let's use the bitwise Python and (`&`) operator on those two numbers:
 
-# In[54]:
+# In[64]:
 
 
 c = a & b
@@ -460,7 +466,7 @@ print(c)
 
 # What we really need to do is look at the representation of this result:
 
-# In[55]:
+# In[65]:
 
 
 bin(c)
@@ -478,13 +484,13 @@ bin(c)
 # 
 # The same happens with `|`, the bitwise `or` operator and unions:
 
-# In[56]:
+# In[66]:
 
 
 c = a | b
 
 
-# In[57]:
+# In[67]:
 
 
 bin(c)
@@ -508,7 +514,7 @@ bin(c)
 # ```
 # 
 
-# In[58]:
+# In[68]:
 
 
 print(bin(a))
@@ -526,19 +532,19 @@ print(bin(a^b))
 # 
 # If we make two corresponding slots into sets and find the symmetric difference between the two, what do we get?
 
-# In[59]:
+# In[69]:
 
 
 {1} ^ {1}
 
 
-# In[60]:
+# In[70]:
 
 
 {0} ^ {1}
 
 
-# In[61]:
+# In[71]:
 
 
 {0} ^ {0}

@@ -3,11 +3,14 @@
 
 # ### Application - Example 1
 
-# Now let's look at some further examples of using descriptors that provides better better reusability than using `property` types (remember the repeated code issue we were trying to solve in the first place!)
+# Now let's look at some further examples of using descriptors that provides 
+# better reusability than using `property` types (remember the repeated code 
+# issue we were trying to solve in the first place!)
 
 # We have already seen that data validation works well with descriptors.
 # 
-# For example, we may want our object attributes to have valid values for some of it's attributes:
+# For example, we may want our object attributes to have valid values for some
+# of it's attributes:
 
 # In[1]:
 
@@ -69,7 +72,8 @@ class List:
     
 
 
-# We can now use these descriptors in multiple class definitions, and as many times as we want in each class:
+# We can now use these descriptors in multiple class definitions, and as many
+# times as we want in each class:
 
 # In[4]:
 
@@ -114,7 +118,10 @@ except ValueError as ex:
     print(ex)
 
 
-# One thing here, is that I got rather tired of writing the same code multiple times for the descriptor classes! (beats having to re-write the same code over and over again that we would have had with properties, but still, we can do better than that!)
+# One thing here, is that I got rather tired of writing the same code multiple
+# times for the descriptor classes! (beats having to re-write the same code over
+# and over again that we would have had with properties, but still, we can do
+# better than that!)
 
 # So let's rewrite this to be a bit more generic:
 
@@ -125,7 +132,7 @@ class ValidType:
     def __init__(self, type_):
         self._type = type_
         
-    def __set_name__(self, owner_clasds, prop_name):
+    def __set_name__(self, owner_class, prop_name):
         self.prop_name = prop_name
         
     def __set__(self, instance, value):

@@ -101,7 +101,9 @@ p.__dict__
 class Point:
     def __new__(cls, x, y):
         print('Creating instance...', x, y)
+        #instance = super().__new__(cls)  # delegate to object.__new__
         instance = object.__new__(cls)  # delegate to object.__new__
+        
         return instance  # don't forget to return the new instance!
     
     def __init__(self, x, y):

@@ -106,7 +106,7 @@ print(s1, id(s1))
 
 # Be careful with this one. These two expressions are **NOT** equivalent (this is because difference operations are not associative):
 
-# In[8]:
+# In[9]:
 
 
 s1 = {1, 2, 3, 4}
@@ -118,7 +118,13 @@ s1 -= s2 - s3
 print(s1)
 
 
-# In[9]:
+# In[10]:
+
+
+s2-s3
+
+
+# In[11]:
 
 
 s1 = {1, 2, 3, 4}
@@ -132,7 +138,7 @@ print(s1)
 
 # #### Symmetric Difference Update
 
-# In[10]:
+# In[12]:
 
 
 s1 = {1, 2, 3, 4, 5}
@@ -140,7 +146,7 @@ s2 = {4, 5, 6, 7}
 s1 ^ s2
 
 
-# In[11]:
+# In[13]:
 
 
 s1 = {1, 2, 3, 4, 5}
@@ -150,7 +156,7 @@ s1 ^= s2
 print(s1, id(s1))
 
 
-# In[12]:
+# In[14]:
 
 
 s1 = {1, 2, 3, 4, 5}
@@ -166,7 +172,7 @@ print(s1, id(s1))
 # What happens when we want to update a set from it's union with multiple other sets?
 # We can certainly do it this way:
 
-# In[13]:
+# In[15]:
 
 
 s1 = {1, 2, 3}
@@ -174,7 +180,7 @@ s2 = {3, 4, 5}
 s3 = {5, 6, 7}
 
 
-# In[14]:
+# In[16]:
 
 
 print(id(s1))
@@ -186,7 +192,7 @@ print(s1, id(s1))
 # 
 # Using the method we do not have that restriction, we can actually use iterables (they must contain hashable elements) and Python will implicitly convert them to sets:
 
-# In[15]:
+# In[17]:
 
 
 s1 = {1, 2, 3}
@@ -196,7 +202,7 @@ print(s1)
 
 # Of course we can achieve the same thing using the operators, it just requires a little more typing:
 
-# In[16]:
+# In[18]:
 
 
 s1 = {1, 2, 3}
@@ -218,14 +224,14 @@ print(s1)
 # 
 # You could take this approach:
 
-# In[17]:
+# In[19]:
 
 
 def combine(string, target):
     target.update(string.split(' '))
 
 
-# In[18]:
+# In[20]:
 
 
 def cleanup(combined):
@@ -233,7 +239,7 @@ def cleanup(combined):
     combined -= words
 
 
-# In[19]:
+# In[21]:
 
 
 result = set()
@@ -252,7 +258,7 @@ print(result)
 
 # To simulate the data source, let's do this:
 
-# In[20]:
+# In[22]:
 
 
 def gen_read_data():
@@ -263,22 +269,10 @@ def gen_read_data():
 
 # And we can use this generator this way:
 
-# In[21]:
-
-
-data = gen_read_data()
-
-
-# In[22]:
-
-
-next(data)
-
-
 # In[23]:
 
 
-next(data)
+data = gen_read_data()
 
 
 # In[24]:
@@ -293,16 +287,28 @@ next(data)
 next(data)
 
 
+# In[26]:
+
+
+next(data)
+
+
+# In[27]:
+
+
+next(data)
+
+
 # Next we're going to create a filter that will look at the data just received, removing any cities that match one we want to ignore:
 
-# In[26]:
+# In[28]:
 
 
 def filter_incoming(*cities, data_set):
     data_set.difference_update(cities)
 
 
-# In[27]:
+# In[29]:
 
 
 result = set()
@@ -311,4 +317,10 @@ for page in data:
     result.update(page)
     filter_incoming('Paris', 'London', data_set=result)
 print(result)
+
+
+# In[ ]:
+
+
+
 

@@ -3,13 +3,19 @@
 
 # ### Property Lookup Resolution
 
-# As we saw in the last set of lectures, something odd is happening when our class uses a data descriptor, and instances contain the same attribute name in the instance dictionary.
+# As we saw in the last set of lectures, something odd is happening when our 
+# class uses a data descriptor, and instances contain the same attribute name in
+# the instance dictionary.
 
 # Contrary to what we expected, the descriptor was **still** used.
 
-# This boils down to data vs non-data descriptors. Python has a default way of where it looks for attributes depending on whether the descriptor is a data-descriptor or not.
+# This boils down to data vs non-data descriptors. Python has a default way of 
+# where it looks for attributes depending on whether the descriptor is a 
+# data-descriptor or not.
 
-# As I explain the lecture video, for data descriptors Python will choose to use the descriptor attribute (in the class), even if the same symbol is found in the instance dictionary.
+# As I explain the lecture video, for data descriptors Python will choose to use
+# the descriptor attribute (in the class), even if the same symbol is found in 
+# the instance dictionary.
 
 # Let's see this again with a simple example:
 
@@ -46,7 +52,7 @@ p.x = 100
 # In[5]:
 
 
-p.x
+print(p.x)
 
 
 # Ok, so the descriptor's `__set__` and `__get__` methods were called.
@@ -148,7 +154,7 @@ l.__dict__
 # In[18]:
 
 
-l.current_time
+print(l.current_time)
 
 
 # we get the value stored in the instance dictionary, **not** the descriptor's `__get__` method.
@@ -169,9 +175,14 @@ del l.__dict__['current_time']
 l.current_time
 
 
-# What this means is that for data descriptors, where we usually need instance-based storage, we can actually use the property name itself to store the value in the instance **under the same name**. It will **not** shadow the class attribute (the descriptor instance), and it has no risk of overwriting any existing instance attributes our class may have!
+# What this means is that for data descriptors, where we usually need 
+# instance-based storage, we can actually use the property name itself to store 
+# the value in the instance **under the same name**. It will **not** shadow the 
+# class attribute (the descriptor instance), and it has no risk of overwriting
+# any existing instance attributes our class may have!
 
-# Of course, this assume that the class does not use slots, or at least specifies `__dict__` as one of the slots if it does.
+# Of course, this assume that the class does not use slots, or at least 
+# specifies `__dict__` as one of the slots if it does.
 
 # Let's apply this to a data descriptor under that assumption:
 
@@ -240,7 +251,10 @@ p.__dict__
 p.first_name, p.last_name
 
 
-# Note that I am **not** using attributes (either dot notation or `getattr`/`setattr`) when setting and getting the values from the instance `__dict__`. If I did, it would actually be calling the descriptors `__get__` and `__set__` methods, resulting in an infinite recursion!!
+# Note that I am **not** using attributes (either dot notation or 
+# `getattr`/`setattr`) when setting and getting the values from the instance
+# `__dict__`. If I did, it would actually be calling the descriptors `__get__` 
+# and `__set__` methods, resulting in an infinite recursion!!
 # 
 # So be careful with that!
 
@@ -262,7 +276,7 @@ class ValidString:
             raise ValueError(f'{self.prop_name} must be '
                              f'at least {self.min_length} characters.'
                             )
-        setattr(instance, self.prop_name, value)
+        setattr(instance, self.prop_name, value) # this call results in infinite recursion 
         
     def __get__(self, instance, owner_class):
         if instance is None:

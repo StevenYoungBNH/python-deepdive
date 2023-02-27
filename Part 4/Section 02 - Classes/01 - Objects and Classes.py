@@ -123,3 +123,21 @@ isinstance(type, type)
 
 isinstance(Person, Person)
 
+
+# In[14]:
+
+
+isinstance(Person, type          )
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+

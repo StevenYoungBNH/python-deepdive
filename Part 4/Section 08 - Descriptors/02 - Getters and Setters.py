@@ -15,6 +15,7 @@
 from datetime import datetime
 
 class TimeUTC:
+    print ("Compiling class TimeUTC")
     def __get__(self, instance, owner_class):
         print(f'__get__ called, self={self}, instance={instance}, owner_class={owner_class}')
         return datetime.utcnow().isoformat()
@@ -24,9 +25,11 @@ class TimeUTC:
 
 
 class Logger1:
+    print ("Compiling class Logger1")
     current_time = TimeUTC()
     
 class Logger2:
+    print ("Compiling class Logger2")
     current_time = TimeUTC()
 
 
@@ -85,6 +88,7 @@ l2.current_time
 from datetime import datetime
 
 class TimeUTC:
+    print("Compiling class TimeUTC")
     def __get__(self, instance, owner_class):
         if instance is None:
             # called from class
@@ -98,6 +102,7 @@ class TimeUTC:
 
 
 class Logger:
+    print("Compiling class Logger")
     current_time = TimeUTC()
 
 
@@ -125,6 +130,7 @@ l.current_time
 
 
 class Logger:
+    print("Compiling class Logger")
     @property
     def current_time(self):
         return datetime.utcnow().isoformat()
@@ -153,6 +159,7 @@ l.current_time
 
 
 class TimeUTC:
+    print("Compiling class TimeUTC")
     def __get__(self, instance, owner_class):
         if instance is None:
             # called from class
@@ -163,6 +170,7 @@ class TimeUTC:
             return datetime.utcnow().isoformat()
         
 class Logger:
+    print ("Compiling class Logger")
     current_time = TimeUTC()
 
 
@@ -189,6 +197,7 @@ l1.current_time, l2.current_time
 
 
 class Countdown:
+    print ("Compiling class Countdown")
     def __init__(self, start):
         self.start = start + 1
         
@@ -204,6 +213,7 @@ class Countdown:
 
 
 class Rocket:
+    print ("Compiling class Rocket")
     countdown = Countdown(10)
 
 
@@ -244,6 +254,7 @@ rocket1.countdown
 
 
 class IntegerValue:
+    print ("Compiling class IntegerValue")
     def __set__(self, instance, value):
         print(f'__set__ called, instance={instance}, value={value}')
         
@@ -294,6 +305,7 @@ p.x = 100
 
 
 class IntegerValue:
+    print ("Compiling class IntegerValue")
     def __set__(self, instance, value):
         self._value = int(value)
         
@@ -308,6 +320,7 @@ class IntegerValue:
 
 
 class Point2D:
+    print ("Compiling class Point2D")
     x = IntegerValue()
     y = IntegerValue()
 

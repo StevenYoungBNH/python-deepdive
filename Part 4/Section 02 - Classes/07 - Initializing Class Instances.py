@@ -59,7 +59,19 @@ p.__dict__
 
 # What actually happens is that after the new instance has been created, Python sees and automatically calls `<instance>.__init__(self, *args, **kwargs)`
 
-# So this is no different that if we had done it this way:
+# In[14]:
+
+
+p.__init__( "Jim")
+
+
+# In[15]:
+
+
+p.__dict__
+
+
+# So this is no different than if we had done it this way:
 
 # In[7]:
 

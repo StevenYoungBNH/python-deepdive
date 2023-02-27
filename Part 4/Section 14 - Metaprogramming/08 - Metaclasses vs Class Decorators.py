@@ -16,11 +16,18 @@
 
 from functools import wraps
 
+import types
+
+
+
 def func_logger(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
-        result = fn(*args, **kwargs)
-        print(f'log: {fn.__qualname__}({args}, {kwargs}) = {result}')
+        try:
+            result = fn(*args, **kwargs)
+            print(f'log: {fn.__qualname__}({args}, {kwargs}) = {result}')
+        except AttributeError as ex:
+            print(f'Log: Function:{fn} Exception: {AttributeError}{ex}')
         return result
     return inner    
 
@@ -63,6 +70,9 @@ class ClassLogger(type):
         new_cls = super().__new__(mcls, name, bases, class_dict)
         for key, obj in vars(new_cls).items():
             if callable(obj):
+                # Added this check since __new__ is a builtin type and not a
+                # function, therefore it does not have a qualified name when
+                # function logger is called. 
                 setattr(new_cls, key, func_logger(obj))
         return new_cls        
 
@@ -203,23 +213,28 @@ s = Student('Alex', 19, 'abcdefg')
 s.study()
 
 
-# This works because `Student` inherits from `Person`, and since `Person` uses a metaclass for the creation, this follows down to the `Student` class as well.
+# This works because `Student` inherits from `Person`, and since `Person` uses a 
+# metaclass for the creation, this follows down to the `Student` class as well.
 
 # In[18]:
 
 
-type(Person)
+print(type(Person))
 
 
 # In[19]:
 
 
-type(Student)
+print(type(Student))
 
 
-# As you can see the type of both the parent and the subclass is `ClassLogger` even though we did not explicitly state that `Student` shouls use the metaclass for creation.
+# As you can see the type of both the parent and the subclass is `ClassLogger` 
+# even though we did not explicitly state that `Student` should use the metaclass
+# for creation.
 # 
-# It happened automatically because we did not have a `__new__` method in the `Student` class, so the parent's `__new__` was essentially used, and that one uses the metaclass.
+# It happened automatically because we did not have a `__new__` method in the 
+# `Student` class, so the parent's `__new__` was essentially used, and that one 
+# uses the metaclass.
 
 # We can see this more explicitly this way:
 
@@ -250,7 +265,11 @@ s = Student('Alex', 19, 'ABC')
 s.study()
 
 
-# One of the disadvantages of metaclasses vs class decorators is that only a "single" metaclass can be used. (Actually it's a bit more subtle than that, we can use a different metaclass in for a subclass if the metclass is a subclass of the parent's metaclass - we'll cover this point again when we look at multiple inheritance.)
+# One of the disadvantages of metaclasses vs class decorators is that only a
+# "single" metaclass can be used. (Actually it's a bit more subtle than that, we
+# can use a different metaclass in for a subclass if the metclass is a subclass
+# of the parent's metaclass - we'll cover this point again when we look at 
+# multiple inheritance.)
 
 # In[26]:
 
@@ -265,14 +284,14 @@ class Metaclass2(type):
 # In[27]:
 
 
-class Person(metaclass=Metaclass1):
+# class Person(metaclass=Metaclass1):
     pass
 
 
 # In[28]:
 
 
-class Student(Person, metaclass=Metaclass2):
+# class Student(Person, metaclass=Metaclass2):
     pass
 
 
@@ -324,8 +343,8 @@ class Class2(metaclass=Metaclass2):
 # In[33]:
 
 
-class MultiClass(Class1, Class2):
-    pass
+#class MultiClass(Class1, Class2):
+#    pass
 
 
 # Again, if one of the base classes is `type` and the other is a custom metaclass, then this is allowed (this is because `Metaclass1` is itself a subclass of `type`:

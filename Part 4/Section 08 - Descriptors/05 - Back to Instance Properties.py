@@ -5,7 +5,9 @@
 
 # Let's try using `WeakKeyDictionary` to store our instance data in our data descriptor.
 # 
-# Basically, this is exactly the same as what we were doing before, but instead of using a standard dictionary (that potentially causes memory leaks), we'll use a `WeakKeyDictionary`.
+# Basically, this is exactly the same as what we were doing before, but instead 
+# of using a standard dictionary (that potentially causes memory leaks), we'll 
+# use a `WeakKeyDictionary`.
 
 # Recall what we had before:
 
@@ -48,10 +50,12 @@ class IntegerValue:
         if instance is None:
             return self
         else:
-            return self.values.get(instance)
+            return self.values.get(instance, "MT")
 
 
-# And that's all there is to it. We now have weak references instead of strong references in our dictionary, and the dictionary cleans up after itself (removes "dead" entries) when the reference object has been destroyed by the GC.
+# And that's all there is to it. We now have weak references instead of strong 
+# references in our dictionary, and the dictionary cleans up after itself 
+# (removes "dead" entries) when the reference object has been destroyed by the GC.
 
 # In[4]:
 
@@ -574,7 +578,9 @@ hasattr(p, '__weakref__')
 w = weakref.ref(p)
 
 
-# So, if we want to use data descriptors using weak references (whether using our own dictionary or a weak key dictionary) with classes that define slots, we'll need to make sure we add `__weakref__` to the slots!
+# So, if we want to use data descriptors using weak references (whether using 
+# our own dictionary or a weak key dictionary) with classes that define slots, 
+# we'll need to make sure we add `__weakref__` to the slots!
 
 # Let's do another example using this latest technique:
 
@@ -757,11 +763,18 @@ BankAccount.account_number.data
 
 # we can see that our dictionaries were cleaned up too!
 
-# OK, so this was a long journey, but it now allows us to handle classes that use slots and are not hashable. 
+# OK, so this was a long journey, but it now allows us to handle classes that
+# use slots and are not hashable. 
 # 
-# Depending on your needs, you may not need all this functionality (for example your objects may be guaranteed to be hashable and supports weak refs, in which case you can use the weak key dictionary approach), or maybe your class is guaranteed not to use slots (or contains `__dict__` as one of the slots), in which case you can just use the instance itself for storage (although the name to use is still an outstanding issue).
+# Depending on your needs, you may not need all this functionality (for example
+# your objects may be guaranteed to be hashable and supports weak refs, in which
+# case you can use the weak key dictionary approach), or maybe your class is 
+# guaranteed not to use slots (or contains `__dict__` as one of the slots), in 
+# which case you can just use the instance itself for storage (although the name
+# to use is still an outstanding issue).
 
-# We'll circle back to using the instance for storage instead of using the data descripor itself in the next set of lectures.
+# We'll circle back to using the instance for storage instead of using the data
+# descripor itself in the next set of lectures.
 
 # In[ ]:
 

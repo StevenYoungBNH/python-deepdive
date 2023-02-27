@@ -295,13 +295,17 @@ p.__dict__
 p.name
 
 
-# Next we would like to have a decorator approach as well. To do that we're going to mimic the way the property decorators work (you may want to go back to those lectures and refresh your memory if needed).
+# Next we would like to have a decorator approach as well. To do that we're
+# going to mimic the way the property decorators work (you may want to go back
+# to those lectures and refresh your memory if needed).
 
 # So how should the `@MakeProperty` decorator work?
 # 
 # It should take a function and return a descriptor object. 
 # 
-# In turn, that descriptor object should have a `setter` method that we can call to *add* the setter method to the descriptor, that also returns the descriptor object - just like we have with `property` types:
+# In turn, that descriptor object should have a `setter` method that we can call 
+# to *add* the setter method to the descriptor, that also returns the descriptor
+# object - just like we have with `property` types:
 
 # In[34]:
 
@@ -334,7 +338,8 @@ class MakeProperty:
         
 
 
-# So both the `__init__` and the `setter` methods can be used like decorators, and we can now use our `MakeProperty` class with decorator syntax:
+# So both the `__init__` and the `setter` methods can be used like decorators, 
+# and we can now use our `MakeProperty` class with decorator syntax:
 
 # We can do it the "long" way first:
 
@@ -411,7 +416,8 @@ p1.first_name
 p1.last_name
 
 
-# And of course this will work with multiple instances of the `Person` class since we are using the instances themselves for the underlying storage:
+# And of course this will work with multiple instances of the `Person` class 
+# since we are using the instances themselves for the underlying storage:
 
 # In[42]:
 
@@ -426,7 +432,8 @@ p2.first_name, p2.last_name = 'Alex', 'Martelli'
 p1.first_name, p1.last_name, p2.first_name, p2.last_name
 
 
-# Of course our implementation is quite simplistic, but it should help solidy our understanding of properties, descriptors, and decorators too!
+# Of course our implementation is quite simplistic, but it should help solidify 
+# our understanding of properties, descriptors, and decorators too!
 
 # In[ ]:
 

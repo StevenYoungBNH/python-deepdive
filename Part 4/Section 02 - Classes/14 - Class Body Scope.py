@@ -8,17 +8,26 @@
 # In[1]:
 
 
+def sumThemAll(a,b,c):
+    return a + b + c
+
 class Language:
     MAJOR = 3
     MINOR = 7
     REVISION = 4
+    
+    print(MAJOR, MINOR, REVISION)
+    print('{}.{}.{}'.format(MAJOR, MINOR, REVISION))
+    print(sumThemAll(MAJOR, MINOR, REVISION)) # This function was defined outside the class scope, and has the class variables available by parameter passing
     FULL = '{}.{}.{}'.format(MAJOR, MINOR, REVISION)
+    testMult = MAJOR * MINOR * REVISION
 
 
 # In[2]:
 
 
-Language.FULL
+print(Language.FULL)
+print(Language.testMult)
 
 
 # However, functions defined inside the class are not nested in the body scope - instead they are nested in whatever scope the class itself is in.
@@ -187,7 +196,8 @@ name = 'Guido'
 class MyClass:
     name = 'Raymond'
     list_1 = [name] * 3
-    list_2 = [name.upper() for i in range(3)]
+    print(list_1)
+    list_2 = [name.upper() for i in range(3)] # a comprehension is a thinly veiled function. 
     
     @classmethod
     def hello(cls):
@@ -223,3 +233,15 @@ MyClass.list_2
 # They are essentially thinly veiled **functions**!!!
 
 # So they behave like a function would, and therefore are not nested in the class body scope, but, in this case, in the module/global scope!
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+

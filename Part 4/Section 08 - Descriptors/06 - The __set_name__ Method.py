@@ -240,6 +240,7 @@ class ValidString:
                              f'{self.min_length} characters'
                             )
         instance.__dict__[self.property_name] = value
+        # setattr(instance, self.property_name, value)
         
     def __get__(self, instance, owner_class):
         if instance is None:
