@@ -19,15 +19,29 @@ from functools import wraps
 import types
 
 
+# S. Youngs solution
+#def func_logger(fn):
+    #@wraps(fn)
+    #def inner(*args, **kwargs):
+        #try:
+            #result = fn(*args, **kwargs)
+            #print(f'log: {fn.__qualname__}({args}, {kwargs}) = {result}')
+        #except AttributeError as ex:
+            #print(f'Log: Function:{fn} Exception: {AttributeError}{ex}')
+        #return result
+    #return inner
 
+# Fred Baptiste's solution
+# https://www.udemy.com/course/python-3-deep-dive-part-4/learn/lecture/16786044#questions/18903900
+# This is a more elegant solution than the my version. 
 def func_logger(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
-        try:
-            result = fn(*args, **kwargs)
-            print(f'log: {fn.__qualname__}({args}, {kwargs}) = {result}')
-        except AttributeError as ex:
-            print(f'Log: Function:{fn} Exception: {AttributeError}{ex}')
+        result = fn(*args, **kwargs)
+        fn_name = getattr(fn, "__qualname__", None) #  static methods don't have a __qualname__
+        if not fn_name:
+            fn_name = fn.__wrapped__.__qualname__
+        print(f'log: {fn_name}({args}, {kwargs}) = {result}')
         return result
     return inner    
 
